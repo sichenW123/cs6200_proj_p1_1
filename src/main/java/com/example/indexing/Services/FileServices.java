@@ -102,13 +102,13 @@ public class FileServices {
     }
 
 
-    public  Set<String> uniqueWord(String name, int RecIndex) throws IOException {
+    public  Set<String> wordSet(String name, int RecIndex) throws IOException {
         Set<String> words = new HashSet<>();
         Set<String> stopWords = stopWords();
         String s = parseXML(name, RecIndex);
 
         String stringInfo = s.toLowerCase();
-        Pattern p = Pattern.compile("[.,\"\\?!:;{}()@#$%^&+/\\[\\]<>]");
+        Pattern p = Pattern.compile("[.,\"\\?!:;{}()@#$%^&+/\\[\\]<>]|[^\\s\\p{L}\\p{N}']|(?<=(^|\\s))'|'(?=($|\\s))");
         Matcher m = p.matcher(stringInfo);
         String first = m.replaceAll(" ");
         String[] ws = first.split("\\s+");
@@ -136,7 +136,7 @@ public class FileServices {
                 NodeList nodes = doc.getElementsByTagName("RECORDNUM");
                 for (int i = 0; i < nodes.getLength(); i++) {
                     String recNum = nodes.item(i).getTextContent();
-                    Set<String> set = uniqueWord(child.getName(), i);
+                    Set<String> set = wordSet(child.getName(), i);
                     for (String s : set) {
                         if (!map.containsKey(s)) {
                             map.put(s, new LinkedList<>());
@@ -163,12 +163,14 @@ public class FileServices {
 
     public List<String> writeToFile(Map<String, List<String>> map) {
         List<String> res = new ArrayList<>();
+        List<Map.Entry<String, List<String>>> sortedList=new ArrayList<>(map.entrySet());
+        sortedList.sort((a, b)->a.getKey().compareTo(b.toString()));
         File writename = new File("./index/" + "indexes.txt");
         try {
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                String str = String.format("%-30s", entry.getKey() + ": ");
+            for (Map.Entry<String, List<String>> entry : sortedList) {
+                String str = String.format("%-40s", entry.getKey() + ": ");
                 List<String> l = entry.getValue();
                 for (String i : l) {
                     str = String.format("%-15s", str + i + ", ");

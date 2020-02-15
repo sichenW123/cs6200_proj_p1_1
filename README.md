@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # cs6200_proj_p1_1  
 
 
@@ -9,3 +10,6 @@ Run the project
 unzip the file  
 navigate to the file and open in command line, input the following command  
 `mvn spring-boot:run`
+=======
+# cs6200_proj_p1_1
+
