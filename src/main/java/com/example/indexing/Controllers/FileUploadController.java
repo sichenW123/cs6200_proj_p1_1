@@ -85,8 +85,11 @@ public class FileUploadController {
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
+        long startTime=System.currentTimeMillis();
         FileServices.AllFiles();
         FileServices.writeToFile(FileServices.termList);
+        long endTime=System.currentTimeMillis();
+        System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 
