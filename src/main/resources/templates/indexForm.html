@@ -1,0 +1,17 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+
+<div>
+    <h2>Indexes</h2>
+</div>
+<div>
+    <ul>
+        <div th:text="${term}"></div>
+        <li th:each="doc: ${docs}">
+            <a th:text="${doc}"/>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
