@@ -21,16 +21,9 @@ import javax.xml.parsers.ParserConfigurationException;
  * Created by Enzo Cotter on 2/8/20.
  */
 public class FileServices {
+    private List<File> files = new ArrayList<>();
+    private Map<String, List<String>> termMap;
     public FileServices() {
-    }
-
-    public static List<File> files = new ArrayList<>();
-    public static Map<String, List<String>> termMap;
-    public static List<Map.Entry<String, List<String>>> termList;
-    public static StorageProperties sp;
-
-    static {
-
         File dir = new File("./upload-dir");
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
@@ -41,7 +34,21 @@ public class FileServices {
     }
 
 
-    public static Set<String> stopWords() throws IOException {
+
+
+    public List<File> getFiles(){
+        return this.files;
+    }
+
+    public Map<String, List<String>> getMap(){
+        return this.termMap;
+    }
+
+
+
+
+
+    public Set<String> stopWords() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(new File("./stoplist.txt")));
         Set<String> set = new HashSet<>();
         String s = br.readLine();
@@ -53,7 +60,7 @@ public class FileServices {
     }
 
 
-    public static String parseXML(String name, int RecIndex) {
+    public  String parseXML(String name, int RecIndex) {
         String s = "";
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -72,7 +79,7 @@ public class FileServices {
     }
 
 
-    private static String getData(Node parentNode, Node node) {
+    private  String getData(Node parentNode, Node node) {
         String s = "";
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             if (node.hasChildNodes()) {
@@ -95,7 +102,7 @@ public class FileServices {
     }
 
 
-    public static Set<String> uniqueWord(String name, int RecIndex) throws IOException {
+    public  Set<String> uniqueWord(String name, int RecIndex) throws IOException {
         Set<String> words = new HashSet<>();
         Set<String> stopWords = stopWords();
         String s = parseXML(name, RecIndex);
@@ -105,19 +112,17 @@ public class FileServices {
         Matcher m = p.matcher(stringInfo);
         String first = m.replaceAll(" ");
         String[] ws = first.split("\\s+");
-        words.add(" ");
         for (String w : ws) {
             if (!stopWords.contains(w)) {
                 words.add(w);
             }
         }
-        words.remove(" ");
         words.remove("");
         return words;
     }
 
 
-    public static List<Map.Entry<String, List<String>>> AllFiles() {
+    public Map<String, List<String>> indexMap() {
         try {
 
             Map<String, List<String>> map = new HashMap<>();
@@ -141,10 +146,8 @@ public class FileServices {
                 }
             }
             termMap = map;
-            List<Map.Entry<String, List<String>>> list = new ArrayList<>(map.entrySet());
-            list.sort((a, b) -> a.getValue().size() - b.getValue().size());
-            termList = list;
-            return list;
+            return map;
+
 
 
         } catch (ParserConfigurationException e) {
@@ -158,13 +161,13 @@ public class FileServices {
 
     }
 
-    public static List<String> writeToFile(List<Map.Entry<String, List<String>>> list) {
+    public List<String> writeToFile(Map<String, List<String>> map) {
         List<String> res = new ArrayList<>();
         File writename = new File("./index/" + "indexes.txt");
         try {
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            for (Map.Entry<String, List<String>> entry : list) {
+            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                 String str = String.format("%-30s", entry.getKey() + ": ");
                 List<String> l = entry.getValue();
                 for (String i : l) {

@@ -26,10 +26,12 @@ import java.util.stream.Collectors;
 public class FileUploadController {
 
     private final StorageService storageService;
+    private FileServices fileServices;
 
     @Autowired
     public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
+        this.fileServices=new FileServices();
     }
 
     @GetMapping("/")
@@ -57,7 +59,7 @@ public class FileUploadController {
 
     @GetMapping("/indexes/{term:.+}")
     public String getSingleIndex(Model model, @PathVariable("term") String term) {
-        model.addAttribute("docs", FileServices.termMap.get(term));
+        model.addAttribute("docs", fileServices.getMap().get(term));
         model.addAttribute("term", term);
         return "indexForm";
 
@@ -86,10 +88,9 @@ public class FileUploadController {
 
         storageService.store(file);
         long startTime=System.currentTimeMillis();
-        FileServices.AllFiles();
-        FileServices.writeToFile(FileServices.termList);
+        fileServices.writeToFile(fileServices.indexMap());
         long endTime=System.currentTimeMillis();
-        System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+        System.out.println("run time： "+(endTime-startTime)+"ms");
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 
