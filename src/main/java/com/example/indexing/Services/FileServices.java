@@ -161,14 +161,19 @@ public class FileServices {
 
     }
 
-    public List<String> writeToFile(Map<String, List<String>> map) {
+    public List<String> writeToFile() {
         List<String> res = new ArrayList<>();
+        long startTime=System.currentTimeMillis();
+        Map<String, List<String>> map=new HashMap<>(indexMap());
+        long endTime=System.currentTimeMillis();
         List<Map.Entry<String, List<String>>> sortedList=new ArrayList<>(map.entrySet());
         sortedList.sort((a, b)->a.getKey().compareTo(b.toString()));
         File writename = new File("./index/" + "indexes.txt");
         try {
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+            out.write("                    \r\n");
+            out.write("run time： "+(endTime-startTime)+"ms"+"\r\n");
             for (Map.Entry<String, List<String>> entry : sortedList) {
                 String str = String.format("%-40s", entry.getKey() + ": ");
                 List<String> l = entry.getValue();
@@ -179,6 +184,11 @@ public class FileServices {
                 res.add(str);
                 out.write(str);
             }
+            String size="file size: "+writename.length()/1024+"kB\r\n";
+            RandomAccessFile rf=new RandomAccessFile(writename, "rw");
+            rf.seek(0);
+            rf.write(size.getBytes());
+            rf.close();
             out.flush();
             out.close();
         } catch (IOException e) {

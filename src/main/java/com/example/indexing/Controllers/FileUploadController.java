@@ -85,12 +85,8 @@ public class FileUploadController {
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
-
         storageService.store(file);
-        long startTime=System.currentTimeMillis();
-        fileServices.writeToFile(fileServices.indexMap());
-        long endTime=System.currentTimeMillis();
-        System.out.println("run time： "+(endTime-startTime)+"ms");
+        fileServices.writeToFile();
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 
