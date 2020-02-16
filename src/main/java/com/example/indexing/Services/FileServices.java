@@ -167,7 +167,7 @@ public class FileServices {
         Map<String, List<String>> map=new HashMap<>(indexMap());
         long endTime=System.currentTimeMillis();
         List<Map.Entry<String, List<String>>> sortedList=new ArrayList<>(map.entrySet());
-        sortedList.sort((a, b)->a.getKey().compareTo(b.toString()));
+        sortedList.sort((a, b)->a.getKey().compareTo(b.getKey()));
         File writename = new File("./index/" + "indexes.txt");
         try {
             writename.createNewFile();
