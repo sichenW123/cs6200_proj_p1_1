@@ -145,7 +145,7 @@ public class FileServices {
                     }
                 }
             }
-            termMap = map;
+            termMap = new HashMap<>(map);
             return map;
 
 
