@@ -33,10 +33,22 @@ public class FileServices {
         }
     }
 
+    public void addFile(){
+        File dir = new File("./upload-dir");
+        File[] directoryListing = dir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                files.add(child);
+            }
+        }
+    }
+
+
 
 
 
     public List<File> getFiles(){
+
         return this.files;
     }
 
