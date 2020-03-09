@@ -1,6 +1,7 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en" xml:lang="en">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -31,13 +32,11 @@
             </li>
         </ul>
     </div>
-    <a th:href="${index}">Download Index File</a>
-    <form th:action="@{/}">
-        <input placeholder="input a term to search" type="text" , th:name="search">
-        <a th:href="@{'/indexes/'+${term}} " th:text="${term}" >
-            search
-        </a>
-    </form>
+    <a href="/search"  >
+        To Search
+    </a>
+
+
 </div>
 
 
